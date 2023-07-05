@@ -18,7 +18,7 @@
         </template>
         Update
       </n-button>
-      <n-button type="error" size="small" @click="popups.deleting = true">
+      <n-button type="error" size="small" @click="destroy()">
         <template #icon>
           <n-icon :component="DeleteRound" />
         </template>
@@ -61,6 +61,7 @@ import {
   NCard,
   NEmpty,
   useMessage,
+  useDialog,
 } from "naive-ui";
 import { PlayArrowRound, CloudSyncRound, DeleteRound } from "@vicons/material";
 import { computed, onMounted, reactive, ref } from "vue";
@@ -70,11 +71,12 @@ import { http } from "../../utils/http";
 const props = defineProps<{ data: any }>();
 
 const $ipc = window.require("electron").ipcRenderer;
+const $dialog = useDialog();
 const $message = useMessage();
 const $library = useLibrary();
 
 const syncing = ref(false);
-const popups = reactive({ running: false, deleting: false });
+const popups = reactive({ running: false });
 
 const focusInstanceKey = ref<string | null>(null);
 const focusInstance = computed<any>(
@@ -123,6 +125,31 @@ async function update() {
   } finally {
     syncing.value = false;
   }
+}
+
+function destroy() {
+  $dialog.warning({
+    title: "Warning",
+    content:
+      "Are you sure you wanna uninstall this app? This operation cannot undo. And this operation only delete the app index. You need delete the app files by you self.",
+    positiveText: "Yes",
+    negativeText: "Not really",
+    onPositiveClick: () => {
+      const data = $library.apps.filter(
+        (v) => v.id === focusInstanceKey.value
+      )[0];
+      const index = $library.apps.indexOf(data);
+
+      focusInstanceKey.value = null;
+
+      $library.apps.splice(index, 1);
+      $library.save();
+
+      $message.success(
+        "Uninstall the app successfully! But the local files isn't delete yet. You need delete them by you self."
+      );
+    },
+  });
 }
 
 onMounted(() => {
