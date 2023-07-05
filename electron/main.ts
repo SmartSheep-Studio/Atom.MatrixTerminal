@@ -8,6 +8,7 @@ import {
 } from "./library/installer";
 import { launchApp } from "./library/launcher";
 import { store } from "./library/resolver";
+import os from 'node:os';
 
 // The built directory structure
 //
@@ -83,7 +84,9 @@ function createWindow() {
 }
 
 app.on("window-all-closed", () => {
-  win = null;
+  if(os.platform() !== "darwin") {
+    app.quit()
+  }
 });
 
 app.whenReady().then(createWindow);
