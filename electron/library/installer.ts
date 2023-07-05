@@ -205,6 +205,7 @@ async function indexAssets(task: InstallTask) {
 
   const apps = (store.get("library.apps") as any[]) ?? [];
   apps.push({
+    id: webcrypto.randomUUID(),
     app: task.options.app,
     release: task.options.release,
     path: task.options.workdir,

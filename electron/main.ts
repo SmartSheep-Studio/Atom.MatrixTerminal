@@ -1,7 +1,13 @@
 import { app, BrowserWindow, dialog, ipcMain } from "electron";
 import path from "node:path";
-import { installApp, MatrixApp, MatrixRelease, tasks } from "./library/installer";
+import {
+  installApp,
+  MatrixApp,
+  MatrixRelease,
+  tasks,
+} from "./library/installer";
 import { launchApp } from "./library/launcher";
+import { store } from "./library/resolver";
 
 // The built directory structure
 //
@@ -57,6 +63,10 @@ function createWindow() {
 
   ipcMain.on("tasks:launch-app", (_event, option: any, run: any) => {
     launchApp(option, run);
+  });
+
+  ipcMain.on("debug:open-store", () => {
+    store.openInEditor();
   });
 
   // Test active push message to Renderer-process.

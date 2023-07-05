@@ -25,7 +25,7 @@
               <n-empty description="No tasks need to process." />
             </n-list-item>
             <n-list-item v-for="item in processList">
-              <n-thing>
+              <div>
                 <div>
                   <div class="font-bold">{{ item.name }}</div>
                   <div>{{ item.description }}</div>
@@ -45,7 +45,7 @@
                     <span>{{ item.progress }}%</span>
                   </div>
                 </div>
-              </n-thing>
+              </div>
             </n-list-item>
           </n-list>
         </n-card>
@@ -56,7 +56,7 @@
               <n-empty description="No completed tasks." />
             </n-list-item>
             <n-list-item v-for="item in finishList">
-              <n-thing>
+              <div>
                 <div>
                   <div class="font-bold">{{ item.name }}</div>
                   <div>{{ item.description }}</div>
@@ -77,7 +77,7 @@
                     <span>{{ item.progress }}%</span>
                   </div>
                 </div>
-              </n-thing>
+              </div>
             </n-list-item>
           </n-list>
         </n-card>

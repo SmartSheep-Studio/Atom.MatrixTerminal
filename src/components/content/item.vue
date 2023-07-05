@@ -45,12 +45,8 @@
             </n-card>
           </n-gi>
           <n-gi span="24 m:10 l:8">
-            <n-card title="Play">
-              <n-select
-                :options="instances"
-                v-model:value="focusInstance"
-                placeholder="Select Instance To Perform Actions"
-              />
+            <n-card title="Run & Play">
+              <item-instances :data="props.data" />
             </n-card>
             <n-card class="mt-2" title="Install">
               <item-releases :data="props.data" />
@@ -73,14 +69,13 @@
 </template>
 
 <script lang="ts" setup>
-import { NSpin, NTag, NSpace, NSelect, NPageHeader, NModal, NGrid, NGi, NCard, useMessage } from "naive-ui";
-import { computed, onMounted, ref } from "vue";
-import { useLibrary } from "../../stores/library";
+import { NSpin, NTag, NSpace, NPageHeader, NModal, NGrid, NGi, NCard, useMessage } from "naive-ui";
+import { onMounted, ref } from "vue";
 import { http } from "../../utils/http";
+import ItemInstances from "./item-instances.vue";
 import ItemReleases from "./item-releases.vue";
 
 const $message = useMessage();
-const $library = useLibrary();
 
 const props = defineProps<{ data: any }>();
 const emits = defineEmits(["close"]);
@@ -88,16 +83,6 @@ const emits = defineEmits(["close"]);
 const app = ref<any>({});
 const buyable = ref(false);
 const newsPopup = ref<boolean[]>([]);
-
-const focusInstance = ref<any | null>(null);
-const instances = computed<any[]>(
-  () =>
-    $library.library
-      ?.filter((v) => v.app_id === app.value.id)
-      .map((v) => {
-        return { label: `${v.app.name} ${v.release.post.title}`, value: v.id };
-      }) ?? []
-);
 
 const reverting = ref(true);
 

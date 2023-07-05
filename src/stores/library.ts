@@ -1,19 +1,17 @@
-import { useLocalStorage } from "@vueuse/core";
+import { store } from "../../electron/library/resolver";
 import { defineStore } from "pinia";
+import { ref } from "vue";
 
 export const useLibrary = defineStore("library", () => {
-  const library = useLocalStorage<any[]>("app-library", [], {
-    serializer: {
-      read(v: any) {
-        if (v === "null") return null;
-        else return JSON.parse(v);
-      },
-      write(v: any) {
-        if (v == null) return "null";
-        else return JSON.stringify(v);
-      },
-    },
-  });
+  const apps = ref<any[]>([])
 
-  return { library };
+  function load() {
+    apps.value = store.get("library.apps")
+  }
+
+  function save() {
+    store.set("library.apps", apps.value)
+  }
+
+  return { apps, load, save };
 });
