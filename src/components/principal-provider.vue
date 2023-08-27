@@ -95,7 +95,7 @@ async function submit() {
       grant_type: "password",
       username: payload.id,
       password: payload.password,
-      scope: "principal",
+      scope: "*",
     });
 
     $principal.setToken(res.data.access_token);

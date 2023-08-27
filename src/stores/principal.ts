@@ -8,7 +8,7 @@ import axios from "axios";
 export const usePrincipal = defineStore("principal", () => {
   const isLoggedIn = ref(false);
   const cookies = useCookies(["authorization"]);
-  const token = useLocalStorage<string | null>("atom-token", null, {
+  const token = useLocalStorage<string | null>("account-tk", null, {
     serializer: {
       read(v: any) {
         if (v === "null") return null;
@@ -22,7 +22,7 @@ export const usePrincipal = defineStore("principal", () => {
   });
 
   const session = ref<any>({});
-  const account = useLocalStorage<any | null>("atom-profile", null, {
+  const account = useLocalStorage<any | null>("account-data", null, {
     deep: true,
     listenToStorageChanges: true,
     serializer: {
@@ -51,7 +51,7 @@ export const usePrincipal = defineStore("principal", () => {
     if (token.value != null) {
       cookies.set("authorization", token.value);
       try {
-        const res = await axios.get("https://index.smartsheep.studio/api/auth", {
+        const res = await axios.get("https://index.smartsheep.studio/api/users/self", {
           headers: { Authorization: `Bearer ${token.value}` },
         });
         account.value = res.data.user;

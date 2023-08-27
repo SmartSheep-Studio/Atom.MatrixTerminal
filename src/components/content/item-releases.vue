@@ -8,11 +8,7 @@
       </div>
 
       <n-list v-else bordered>
-        <n-empty
-          v-if="data.length <= 0"
-          class="py-8"
-          description="There is no data here."
-        />
+        <n-empty v-if="data.length <= 0" class="py-8" description="There is no data here." />
 
         <n-list-item v-for="item in data">
           <n-thing>
@@ -25,11 +21,7 @@
             </template>
 
             <n-space size="small">
-              <n-button
-                type="primary"
-                size="small"
-                @click="configureInstallOpts(item)"
-              >
+              <n-button type="primary" size="small" @click="configureInstallOpts(item)">
                 <template #icon>
                   <n-icon :component="DownloadRound" />
                 </template>
@@ -42,11 +34,8 @@
     </n-spin>
 
     <div class="flex justify-center mt-4">
-      <n-pagination
-        v-model:page="pagination.page"
-        :page-count="Math.ceil((rawData.length ?? 0) / pagination.pageSize)"
-        :page-slot="pagination.slot"
-      />
+      <n-pagination v-model:page="pagination.page" :page-count="Math.ceil((rawData.length ?? 0) / pagination.pageSize)"
+        :page-slot="pagination.slot" />
     </div>
 
     <n-modal v-model:show="installingOpts.display" class="w-120">
@@ -55,20 +44,11 @@
           <div class="text-gray-600">Install</div>
           <div class="text-xl font-bold">{{ installingOpts.item?.name }}</div>
         </div>
-        <n-input
-          type="textarea"
-          :value="installingOpts.path"
-          :autosize="{ minRows: 3 }"
-          :loading="installingOpts.choosing"
-          @click="setInstallingOptsPath()"
-          placeholder="Installation path of the instance"
-        />
-        <n-button
-          class="mt-3 w-full"
-          type="primary"
-          :disabled="installingOpts.path.length <= 0"
-          @click="install(installingOpts.item)"
-        >
+        <n-input type="textarea" :value="installingOpts.path" :autosize="{ minRows: 3 }"
+          :loading="installingOpts.choosing" @click="setInstallingOptsPath()"
+          placeholder="Installation path of the instance" />
+        <n-button class="mt-3 w-full" type="primary" :disabled="installingOpts.path.length <= 0"
+          @click="install(installingOpts.item)">
           <template #icon>
             <n-icon :component="DownloadRound" />
           </template>
@@ -118,7 +98,7 @@ const rawData = ref<any[]>([]);
 const data = computed(() => {
   const start = (pagination.page - 1) * pagination.pageSize;
   return (
-    rawData.value?.reverse().slice(start, start + pagination.pageSize) ?? []
+    rawData.value?.slice(start, start + pagination.pageSize) ?? []
   );
 });
 
